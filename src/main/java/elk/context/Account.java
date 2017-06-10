@@ -1,5 +1,8 @@
 package elk.context;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 public class Account implements Comparable<Object>{
 	
 	private String accountNumber;
@@ -14,10 +17,28 @@ public class Account implements Comparable<Object>{
 	private String city;
 	private String state;
 
+	public static HashMap<String, Object> initAccountInformations(String accountNumber, Integer balance, String firstname,
+			String lastname, Integer age, String gender, String address,
+			String employer, String email, String city, String state){
+		
+		HashMap<String, Object> accountInfo = new HashMap<String, Object>();
+		accountInfo.put("accountNumber", accountNumber);
+		accountInfo.put("balance", balance);
+		// TODO complete
+		
+		return accountInfo;
+		
+		
+	}
+	
 	public Account(String accountNumber, Integer balance, String firstname,
 			String lastname, Integer age, String gender, String address,
-			String employer, String email, String city, String state) {
+			String employer, String email, String city, String state) throws CustomException {
 	
+		HashMap<String, Object> accountInfo = initAccountInformations(accountNumber, balance, firstname, lastname, age, gender, address, employer, email, city, state);
+		if(anyNull(accountInfo))
+			throw new CustomException("One or more null parameter");
+		
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.firstname = firstname;
@@ -126,10 +147,15 @@ public class Account implements Comparable<Object>{
 					this.balance == obj.balance && this.email.equals(obj.email) && this.employer.equals(obj.employer) && this.firstname.equals(obj.firstname) &&
 					this.gender.equals(obj.gender) && this.lastname.equals(obj.lastname) && this.state.equals(obj.state))
 				return 1;
-			else
-				return 0;
 		}
 		return 0;
+	}
+	
+	private boolean anyNull(HashMap<String, Object> hashMap){
+		for(Entry<String, Object> entry : hashMap.entrySet())
+			if (entry.getValue() == null)
+				return true;
+		return false;
 	}
 
 }
